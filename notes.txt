@@ -1,0 +1,39 @@
+delete,write,copy by ref & value,read
+variables for ram, page table, virtual, disk
+16kb ram
+4kb storage page table (4 pages)
+32kb virtual
+addresses short (16bits)
+
+page table function conversion:
+Separates program into dictionaries of size 4.
+
+Program functions: Spell out sentences in RAM with page table locations/ Changes color of box in page table for in use or not/ updates Output box with text
+
+Ram:
+-Array with reserved spaces for page tables, excess can be used to run the program.
+
+Disk:
+-Array with free spaces for excess program storage.
+
+Log:
+-Shows what programs have been run
+
+Simulation:
+1. Virtual Mem populated with letters of program.
+2. Page table dictionaries generated with letters and locations.
+3. RAM and Disk randomly populated with page tables/letters in program, locations stored in page tables.
+4. Program runs, spelling out a sentence in the RAM.
+5. Log updates after program finishes.
+
+Virtual Mem = 2D Array (Program length)
+Page Table = Dictionary (4 key/value pairs)
+RAM = 2D Array (24 arrays (12 & 12) First 4 of each array dedicated for PTE's)
+Disk = 2D Array (48 arrays 24 & 24 First 6 of each dedicated for excess PTE's)
+Output box = Text
+Log = Text
+
+Sentences: "Welcome to Virtual Memory Simulator"
+"Virtual memory is split into page table entries"
+"Page table entries track the locations on RAM and the Disk"
+"We wish you a Merry Christmas"

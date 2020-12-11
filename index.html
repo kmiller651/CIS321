@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>VirtualMem</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython.min.js">
+        </script>
+        <script type="text/javascript">
+        function load() {
+            let programs = ["program1", "program2", "program3", "program4"];
+            for (i=0;i<programs.length;i++) {
+                document.getElementById("programs").innerHTML += programs[i] + "<br>";
+            }
+        }
+        </script>
+    </head>
+    <body onload="load()">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div id="output">The program will run here.</div>
+        <div id="ppl">
+            <div id="programs">To Run:<hr></div>
+            <div id="pte"></div>
+            <div id="log">Log:<hr></div>
+        </div>
+        <div id="vrd">
+            <div id="virtual_mem">Virtual Memory:<hr></div>
+            <div id="ram">Ram:<hr></div>
+            <div id="disk">Disk:<hr></div>
+        </div>
+            
+        
+    </body>
+</html>
