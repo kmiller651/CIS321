@@ -1,9 +1,42 @@
-#title {
+body{
+	background-color: lightblue;
+}
+
+.box{
+	background-color: white;
+}
+
+optgroup {
     text-align: center;
 }
 
+canvas{
+	width: 100%;
+    height: calc(100% - 3em);
+}
+
+p {
+    line-height: 0em;
+}
+
+#logger{
+	line-height: revert;
+	overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    flex: 1;
+	margin-block: 0px;
+}
+
+.scroll_helper{
+	display:flex;
+	flex-direction:column;
+	height: 85%;
+}
+/* BOX STYLES */
+
 #output {
-    width:100%;
+    width:99%;
     height:100px;
     line-height:100px;
     border-style:solid;
@@ -14,103 +47,85 @@
 }
 
 #programs {
-    width:15%;
-    height:120px;
-    border-style:solid;
-    border-color:black;
-    border-width:2px;
-    display:inline-block;
-    margin:0 auto;
-    overflow:auto;
+    width: 20.5%;
+    height: 300px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    display: inline-block;
+    margin: 0 auto;
+    overflow: auto;
 }
 
 #pte {
-    width:20%;
-    height:160px;
-    border-style:solid;
-    border-color:black;
-    border-width:2px;
-    display:inline-block;
-    margin-left:50px;
-    margin-right:50px;
-    overflow:auto;
+    width: 20%;
+    height: 300px;
+    left: 22.5%;
+    position: absolute;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    display: inline-block;
 }
 
 #log {
-    width:15%;
-    height:120px;
-    border-style:solid;
-    border-color:black;
-    border-width:2px;
-    display:inline-block;
-    margin:0 auto;
-    overflow:auto;
-}
-
-#virtual_mem {
-    width:20%;
-    height:300px;
-    border-style:solid;
-    border-color:black;
-    border-width:2px;
-    display:inline-block;
-    margin:0 auto;
-    overflow:auto;
-}
-
-#ram {
-    width:40%;
-    height:150px;
-    border-style:solid;
-    border-color:black;
-    border-width:2px;
-    display:inline-block;
-    margin-left:100px;
-    margin-right:100px;
-    overflow:auto;
-    text-align: center;
+    width: 54%;
+    height: 300px;
+    position: absolute;
+    border-style: solid;
+    left: 45%;
+    border-color: black;
+    border-width: 2px;
+    display: inline-block;
+    margin: 0 auto;
+    overflow: auto;
 }
 
 #disk {
-    width:20%;
-    height:300px;
-    border-style:solid;
-    border-color:black;
-    border-width:2px;
-    display:inline-block;
-    margin:0 auto;
-    overflow:auto;
+    width: 20%;
+    height: 615px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    display: inline-block;
+    margin: 0 auto;
+    overflow: auto;
+    position: absolute;
+	right: 1.5%;
+}
+
+#virtual_mem {
+    width: 76.5%;
+    position: absolute;
+    height: 305px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    display: inline-block;
+    overflow: auto;
+    float: right;
+}
+
+#ram {
+    width: 76.5%;
+    height: 305px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    display: inline-block;
+    margin: 0 auto;
+    overflow: auto;
+    float: left;
+    position: absolute;
+    top: 315px;
 }
 
 #ppl {
     width:100%;
-    text-align:center;
-    margin-bottom:50px;
+    margin-bottom:25px;
 }
 
 #vrd {
-    width:100%;
-    text-align:center;
-}
-
-.membox {
-    display:inline-block;
-    margin:1px;
-    padding:2px;
-    overflow:auto;
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
-    width:20%;
-}
-
-.membox2 {
-    display:inline-block;
-    margin:1px;
-    padding:2px;
-    overflow:auto;
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
-    width:8%;
+    width: 100%;
+    position: absolute;
 }
