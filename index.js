@@ -14,12 +14,14 @@ function load() {
 	PRGM = document.getElementById("programs");
 	PT = document.getElementById("pte");
 	Proc = new processor();
+	np_arr = [];
 	
 	
 	for (i=0;i<5;i++) {
 		add_program("program" + (i+1));
 		np = ("program" + (i+1));
 		np = new process();
+		np_arr.push(np);
 	}
 	
 	//Init canvas printing
@@ -105,11 +107,16 @@ class processor {
 		this.queue = [];
 	}
 	
-	add_process(process){
+	add_process(){
 		PRGM = document.getElementById("programs");
-		process = PRGM.value;
-		this.queue.push(process);
-		this.run();
+		var process = PRGM.value;
+		for (i=0;i<np_arr.length;i++) {
+			if (process == String(np_arr[i])) {
+				this.queue.push(np_arr[i]);
+				this.run();
+			}
+		}
+		
 	}
 	
 	run(){
@@ -154,14 +161,32 @@ class process {
 	}
 
 	p_create_pte(length, data) {
+		//creates page tables split into sections of 32, with the starting memory position, ending position and the length of the page table.
 		var counter = 0;
+		var pte_arr = [];
+		var mem_choice = RAM;
 		for (i=0;i<data.length;i++) {
 			counter += 1;
 		}
+		var dataBreak = Math.round(counter / 2);
+		var numOfPTE = Math.ceil(counter / length);
+		counter = 0;
+		for (x=0;x<numOfPTE.length;x++) {
+			var temp = x;
+			var name = ("pte" + x);
+			name = {mem_loc:mem_choice, mem_start:counter, mem_end:(counter + numOfPTE), length:numOfPTE};
+			counter += numOfPTE;
+			if (counter>=dataBreak) {
+				mem_choice = DISK;
+			}
+			pte_arr.push(name);
+		}
+		console.log(pte_arr);
 
 	}
 
 	p_run() {
+		//Begins by checking which process was clicked to run, then creates page tables and moves the data to RAM or Disk.
 		for (i=0;i<this.length;i++) {
 			var checker = checker += i;
 		}
