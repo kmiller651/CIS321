@@ -178,6 +178,7 @@ class process {
 			counter += numOfPTE;
 			if (counter>=dataBreak) {
 				mem_choice = DISK;
+				counter = 0;
 			}
 			pte_arr.push(name);
 		}
