@@ -18,7 +18,8 @@ function load() {
 	
 	for (i=0;i<5;i++) {
 		add_program("program" + (i+1));
-		("program" + (i+1)) = new process();
+		np = ("program" + (i+1));
+		np = new process();
 	}
 	
 	//Init canvas printing
