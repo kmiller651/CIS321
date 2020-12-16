@@ -12,167 +12,45 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython.min.js">
-        </script>
-        <script type="text/javascript">
-        //Global variables, splits the strings into arrays of letters.
-        let programs = ["program1", "program2", "program3", "program4"];
-        let str = []
-        let sentences = []
-        str[0] = "Welcome to Virtual Memory Simulator";
-        str[1] = "Virtual memory is split into page table entries";
-        str[2] = "Page table entries track the locations on RAM and the Disk";
-        str[3] = "We wish you a Merry Christmas";
-        for (i=0;i<str.length;i++) {
-            sentences[i] = str[i].split("");
-        }
-
-        function Load() {
-            // Loads the programs onto the list with clickable buttons calling what function needs to be ran.
-            for (i=0;i<programs.length;i++) {
-                document.getElementById("programs").innerHTML += "<button id='program"+i+"' onclick='Run("+i+")'>"+programs[i]+"</button><br>";
-            }
-
-        }
-
-        function Run(value) {
-            // Runs each program depending on which button is clicked
-            if (value == 0) {
-                let elem = document.getElementById("program0");
-                elem.remove();
-
-
-            }
-            if (value == 1) {
-                let elem = document.getElementById("program1");
-                elem.remove();
-                
-            }
-            if (value == 2) {
-                let elem = document.getElementById("program2");
-                elem.remove();
-                
-            }
-            if (value == 3) {
-                let elem = document.getElementById("program3");
-                elem.remove();
-                
-            }
-        }
-
-        function removeElement(array, id) {
-            const index = array.indexOf(id);
-            if (index > -1) {
-                array.splice(index, 1);
-            }
-        }
-
+        src="index.js">
         </script>
     </head>
-    <body onload="Load()">
+    <body onload="load()">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <h2 id="title">Virtual Memory Simulation:<hr></h2>
-        <div id="output">The program will run here.</div>
+        <div class="box" id="output">The program will run here.</div>
         <div id="ppl">
-            <div id="programs">To Run:<hr></div>
-            <div id="pte">PTE:<hr></div>
-            <div id="log">Log:<hr></div>
+			
+            <select class="box" id="programs" size="10">
+				<optgroup label="Programs:">
+			</select>
+			
+            <select class="box" id="pte" size="10">
+				<optgroup label="Page Table:">
+			</select>
+            
+			<span class="box" id="log">
+				<p>Log:</p><hr>
+				<div class="scroll_helper">
+					<p id="logger"></p>
+				</div>
+			</span>
         </div>
         <div id="vrd">
-            <div id="virtual_mem">Virtual Memory:<hr></div>
-            <div id="ram">Ram:<hr>
-                <table class="memtable">
-                    <tr class="memrow">
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                        <td class="membox2">0</td>
-                    </tr>
-                </table>
-            </div>
-            <div id="disk">Disk:<hr>
-                <table class="memtable">
-                    <tr class="memrow">
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                        <td class="membox">0</td>
-                    </tr>
-                </table>
+			<div class="box" id="virtual_mem">
+				<p>Virtual Memory:</p><hr>
+				<canvas id="canvas_vmem" width="1830" height = "255"></canvas>
+			</div>
+            <div class="box" id="ram">
+				<p>Ram:</p><hr>
+				<canvas id="canvas_ram" width="1830" height = "255"></canvas>
+			</div>
+            <div class="box" id="disk">
+				<p>Disk:</p><hr>
+				<canvas id="canvas_disk" width="480" height = "565"></canvas>
+			</div>
             
-            </div>
         </div>
             
         
