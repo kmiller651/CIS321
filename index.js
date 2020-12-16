@@ -13,10 +13,12 @@ function load() {
 	LOG = document.getElementById("logger");
 	PRGM = document.getElementById("programs");
 	PT = document.getElementById("pte");
+	Proc = new processor();
 	
 	
 	for (i=0;i<5;i++) {
 		add_program("program" + (i+1));
+		("program" + (i+1)) = new process();
 	}
 	
 	//Init canvas printing
@@ -88,6 +90,12 @@ function remove_program(index){
 	//remove program by index
 	PRGM.remove(index);
 }
+
+function clear_output() {
+	var e = document.getElementById("output");
+	e.innerHTML = "<button onclick='Proc.add_process(value)' id='runProgram'>Run</button>";
+}
+
 /* -------------------- PROCESSOR -------------------- */
 //bare bones processor class (change this to do whatever you had in mind)
 class processor {
@@ -97,14 +105,17 @@ class processor {
 	}
 	
 	add_process(process){
+		PRGM = document.getElementById("programs");
+		process = PRGM.value;
 		this.queue.push(process);
+		this.run();
 	}
 	
 	run(){
 		//FIFO
 		add_log(get_time() + " Run " + this.queue[0].name);
 		
-		this.queue[0].run();
+		this.queue[0].p_run();
 		
 		add_log(get_time() + " Complete " + this.queue[0].name);
 		
@@ -117,6 +128,7 @@ class process {
 	constructor (){
 		//My brain isn't working rn. I know we need to make some simulated program to show the movement of memory.
 		//If you would write those, I can get the graphics part up. All the functions to print things to the screen should already be written. 
+
 	}
 	
 	p_delete(mem_loc, start, length){
@@ -138,6 +150,35 @@ class process {
 	
 	p_read(mem_loc, start, length){
 		//load data from somewhere in memory
+	}
+
+	p_create_pte(length, data) {
+		var counter = 0;
+		for (i=0;i<data.length;i++) {
+			counter += 1;
+		}
+
+	}
+
+	p_run() {
+		for (i=0;i<this.length;i++) {
+			var checker = checker += i;
+		}
+		if (checker == "program1") {
+			this.p_create_pte(32, "Welcome to Virtual Memory Simulator");
+		}
+		if (checker == "program2") {
+			this.p_create_pte(32, "Virtual memory is split into page table entries");
+		}
+		if (checker == "program3") {
+			this.p_create_pte(32, "Page table entries track the locations on RAM and the Disk");
+		}
+		if (checker == "program4") {
+			this.p_create_pte(32, "Data is swapped in and out of the disk and RAM");
+		}
+		if (checker == "program5") {
+			this.p_create_pte(32, "We wish you a Merry Christmas");
+		}
 	}
 }
 

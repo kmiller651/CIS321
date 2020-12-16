@@ -38,12 +38,12 @@ p {
 #output {
     width:99%;
     height:100px;
-    line-height:100px;
     border-style:solid;
     border-color:black;
     border-width:2px;
     margin-bottom:20px;
     text-align:center;
+    overflow:auto;
 }
 
 #programs {
