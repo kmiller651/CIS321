@@ -1,6 +1,7 @@
 //Globals
-var LOG, PRGM, PT, PROCESSES;
-
+var LOG, PRGM, PT;
+var PROCESSES = [];
+var ALL_MEMORY = {}
 //Init Visiual Memory
 var VM = Array.from(Array(64), () => new Array(4));
 var RAM = Array.from(Array(64), () => new Array(4));
@@ -43,7 +44,7 @@ function load() {
 	np = new process("This is a test");
 	np = new process("This is a test");
 	np = new process("This is a test");
-	np = new process("This is a test");
+	np = new process("Is this a test");
 	//we can print to any memory location
 	//writeMemory(DISK, "This is a sample sentence.");
 	//writeMemory(RAM, "This is a loaded sentence.");
@@ -97,6 +98,7 @@ function navigate(mem_loc, start, len, func){
 }	
 
 function writeMemory(mem_loc, text){
+	console.log("Writing " + text + " to " + ((mem_loc==RAM) ? "RAM" : (mem_loc==DISK) ? "DISK" : "VM"));
 	//search for available memory
 	len = text.length;
 	var start = searchForFreeSpace(mem_loc, len);
@@ -115,27 +117,67 @@ function writeMemory(mem_loc, text){
 		
 		if(mem_loc === RAM){
 			//return RAM address
-			return start[0] + ", " + zeroPad((start[2]*16 + start[1]).toString(16), 2);
+			return start;
 		}else{
 			//return VM or DISK address (0-255) -> (00-FF) in hex
-			return "0x" + zeroPad((start[1]*mem_loc[0].length + start[0]).toString(16), 2);
+			console.log(start[1]*mem_loc[0].length + start[0], start, mem_loc[0].length);
+			return "0x" + zeroPad((start[1]*mem_loc.length + start[0]).toString(16), 2);
 		}
 	}else{
-		//move memory out to DISK
-		//
-		console.log("Move data out of RAM to DISK");
-		//writeMemory(mem_loc, text);
+		switch(mem_loc){
+			case RAM:
+				//move memory out to DISK (addr, len)
+				ram_loc = analyzeMemory(len);
+				//log process
+				add_log("Moving data from RAM to Disk");
+				
+				//move data to DISK from RAM (and erase the RAM)
+				//PAGE_TABLE[ram_loc[0]] is string not start
+				shiftToDISK(PAGE_TABLE[ram_loc[0]], ram_loc[1]);
+				//return the address where memory was loaded
+				return writeMemory(mem_loc, text);
+				
+			case VM:
+				add_log("Error: Virtual Memory Full");
+				return null;
+			case DISK:
+				add_log("Error: Out of Disk Space");
+				return null;
+		}
 	}
 }
 
 function analyzeMemory(len){
 	//look for least used segment in RAM of at least length len and move it to DISK
-	//TODO
+	DISK_has_space = searchForFreeSpace(DISK, len);
+	
+	if(DISK_has_space){
+		activeMemory = []
+		//Get all memory chunks of sufficient size
+		for (var p of PROCESSES){
+			for (var m of p.activeVM){
+				if(m[1] >= len){
+					activeMemory.push([p, m]);
+				}
+			}
+		}
+		//sort by oldest use
+		activeMemory.sort((a, b) => {
+			return a[0].lastAccess > b[0].lastAccess;
+		});
+		
+		//return RAM address
+		return activeMemory[0][1];
+	}else{
+		//No room to put new data
+		add_log("Error: Insufficient Memory");
+		return null;
+	}
 }
 
 function shiftToDISK(start, len){
 	data = readMemory(RAM, start, len);
-	writeMemory(DISK, data);
+	console.log(writeMemory(DISK, data));
 	eraseMemory(RAM, start, len);
 }
 
@@ -236,7 +278,10 @@ function add_log(text){
 function add_PT_entry(vm_addr, ram_addr){
 	//Add Page Table entry
 	PAGE_TABLE[vm_addr] = ram_addr;
-	PT.innerHTML += "<option>" + vm_addr + " || (" + ram_addr + ")</option>";
+	//reformat ram display
+	var ram_out = ram_addr[0] + ", " + zeroPad((ram_addr[2]*16 + ram_addr[1]).toString(16), 2);
+	//print to table
+	PT.innerHTML += "<option onmouseup='recolorMem(true)' onmousedown='recolorMem(false)'>" + vm_addr + " || (" + ram_out + ")</option>";
 }
 
 function remove_PT_entry(key, index){
@@ -258,6 +303,16 @@ function remove_program(index){
 function clear_output() {
 	var e = document.getElementById("output");
 	e.innerHTML = "<button onclick='Proc.add_process(value)' id='runProgram'>Run</button>";
+}
+
+function recolorMem(selected){
+	key = PT.value.split(" || ")[0];	
+	counter = ALL_MEMORY[key];
+	navigate(RAM, PAGE_TABLE[key], counter, (c, r) => {
+		RAM[c + PAGE_TABLE[key][0]*16][r].recolor(selected ? 'lightblue' : '#00FF00');
+		counter --;
+		return counter;
+	});
 }
 
 /* -------------------- PROCESSOR -------------------- */
@@ -292,7 +347,6 @@ class processor {
 }
 
 /* -------------------- PROCESSES -------------------- */
-//********************* TODO HERE!! *****************************
 class process {
 	constructor (data, func){
 		//function passed that will execute a series of operations on data
@@ -303,13 +357,31 @@ class process {
 		//log of memory in use
 		this.activeVM = [];
 		//init active memory
-		this.data = data;
-		this.p_load();
+		this.p_load(data);
 		
 		//last time the process did something
 		this.lastAccess = new Date();
 	}	
-
+	
+	p_load(data){
+		//loads data into RAM and VM (also handles shifting of memory to make room)
+		
+		//load the data and get the vm_addr
+		var vm_addr = loadData(data);
+		//keep a log of active memory
+		this.activeVM.push([vm_addr, data.length]);
+		
+		ALL_MEMORY[vm_addr] = data.length;
+	}
+	
+	p_delete(mem_loc, start, length){
+		eraseMemory(mem_loc, start, length);
+	}
+	
+	p_write(mem_loc, start, data){
+		
+	}
+	
 	p_swap(mem_loc, dataToSwap, dataSwapped) {
 		//Takes two strings and swaps them out, the first being swapped in, the second being taken out of the memory location.
 		var check = readMemory(mem_loc, 0, mem_loc.length);
@@ -368,9 +440,6 @@ class process {
 	
 	p_read(mem_loc, start, length){
 		//load data from somewhere in memory
-		var data = readMemory(mem_loc, start, length);
-		return data;
-
 	}
 
 	p_create_pte(length, data) {
@@ -391,11 +460,10 @@ class process {
 			counter += numOfPTE;
 			if (counter>=dataBreak) {
 				mem_choice = DISK;
-				counter = 0;
 			}
 			pte_arr.push(name);
 		}
-		//console.log(pte_arr);
+		console.log(pte_arr);
 
 	}
 
@@ -558,6 +626,11 @@ class canvas_memory {
 		}else{
 			this.ctx.fillText(str, this.xPos + 7, this.yPos + 17);
 		}
+	}
+	
+	recolor(c){
+		this.color(c);
+		this.write(this.data);
 	}
 	
 	color(c){
