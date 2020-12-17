@@ -45,6 +45,8 @@ function load() {
 	np = new process("This is a test");
 	np = new process("This is a test");
 	np = new process("Is this a test");
+	delete PAGE_TABLE["0x00"];
+	PT.remove(0);
 	//we can print to any memory location
 	//writeMemory(DISK, "This is a sample sentence.");
 	//writeMemory(RAM, "This is a loaded sentence.");
@@ -67,8 +69,6 @@ function loadData(data){
 	
 	//add page table entry
 	add_PT_entry(VM_address, RAM_address);
-	PAGE_TABLE.delete_PT("0x00");
-	console.log(PAGE_TABLE);
 	//return the VM address
 	return VM_address;
 }
