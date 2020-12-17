@@ -309,6 +309,18 @@ class process {
 		//last time the process did something
 		this.lastAccess = new Date();
 	}	
+
+	p_swap(mem_loc, dataToSwap, dataSwapped) {
+		//Takes two strings and swaps them out, the first being swapped in, the second being taken out of the memory location.
+		var check = readMemory(mem_loc, 0, mem_loc.length);
+		var start = check.indexOf(dataSwapped);
+		if (!start) {
+			return "String not found in memory";
+		} else{
+			var len = dataToSwap.length;
+			writeMemory(mem_loc, start, len);
+		}
+	}
 	
 	p_load(data){
 		//loads data into RAM and VM (also handles shifting of memory to make room)
@@ -324,20 +336,41 @@ class process {
 	}
 	
 	p_write(mem_loc, start, data){
-		
+		//Checks to see if there is data present already, if not writes the data.
+		var check = this.p_read(mem_loc, start, length);
+		if (!check) {
+			writeMemory(mem_loc, start, length);
+		} else {
+			return "Data is already written here";
+		}
 	}
 	
 	p_copy_by_ref(mem_loc, start, length){
 		//copy the Virtual memory but not the RAM
+		var check = this.p_read(mem_loc, start, length);
+		if (!check) {
+			return "No data found";
+		} else {
+			return check;
+		}
 		
 	}
 	
 	p_copy_by_value(mem_loc, start, length){
 		//copy the virtual and RAM 
+		var check = this.p_read(mem_loc, start, length);
+		if (!check) {
+			return "No data found";
+		} else {
+			return check;
+		}
 	}
 	
 	p_read(mem_loc, start, length){
 		//load data from somewhere in memory
+		var data = readMemory(mem_loc, start, length);
+		return data;
+
 	}
 
 	p_create_pte(length, data) {
@@ -362,7 +395,7 @@ class process {
 			}
 			pte_arr.push(name);
 		}
-		console.log(pte_arr);
+		//console.log(pte_arr);
 
 	}
 
