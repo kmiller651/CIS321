@@ -67,7 +67,8 @@ function loadData(data){
 	
 	//add page table entry
 	add_PT_entry(VM_address, RAM_address);
-		
+	PAGE_TABLE.delete_PT("0x00");
+	console.log(PAGE_TABLE);
 	//return the VM address
 	return VM_address;
 }
@@ -288,6 +289,14 @@ function remove_PT_entry(key, index){
 	//remove Page Table entry by index
 	delete PAGE_TABLE[key];
 	PT.remove(index);
+}
+
+function delete_PT(key) {
+	if(this.hasKey(key)) {
+		delete this.container[key];
+		return true;
+	}
+	return false;
 }
 
 function add_program(text){
