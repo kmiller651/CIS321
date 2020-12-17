@@ -394,29 +394,6 @@ class process {
 		}
 	}
 	
-	p_load(data){
-		//loads data into RAM and VM (also handles shifting of memory to make room)
-		
-		//load the data and get the vm_addr
-		var vm_addr = loadData(this.data);
-		//keep a log of active memory
-		this.activeVM.push(vm_addr);
-	}
-	
-	p_delete(mem_loc, start, length){
-		eraseMemory(mem_loc, start, length);
-	}
-	
-	p_write(mem_loc, start, data){
-		//Checks to see if there is data present already, if not writes the data.
-		var check = this.p_read(mem_loc, start, length);
-		if (!check) {
-			writeMemory(mem_loc, start, length);
-		} else {
-			return "Data is already written here";
-		}
-	}
-	
 	p_copy_by_ref(mem_loc, start, length){
 		//copy the Virtual memory but not the RAM
 		var check = this.p_read(mem_loc, start, length);
